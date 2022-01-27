@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.natife.example.multithreadingdemoapp.databinding.MainFragmentBinding
 
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: MainFragmentBinding
-    private val myViewModel = MainViewModel()
+    private val myViewModel: MainViewModel by lazy {
+        ViewModelProvider(requireActivity())[MainViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
