@@ -3,6 +3,8 @@ package com.natife.example.multithreadingdemoapp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.rxjava3.core.Observable
+import kotlinx.coroutines.delay
 
 class MainViewModel : ViewModel() {
 
@@ -10,10 +12,10 @@ class MainViewModel : ViewModel() {
     private val mLiveData = MutableLiveData<Double>()
     val liveData: LiveData<Double> = mLiveData
 
-    fun executeRandomNumberCycle() {
+    fun executeRandomNumberCycleByLiveData() {
         Thread {
             while (i < 10) {
-                val data = getRandomNumber()
+                val data = Math.random()
                 mLiveData.postValue(data)
                 Thread.sleep(1000)
                 i++
@@ -21,8 +23,25 @@ class MainViewModel : ViewModel() {
         }.start()
     }
 
-    private fun getRandomNumber(): Double {
-        return Math.random()
+    suspend fun executeRandomNumberCycleByCoroutines() {
+        while (i < 10) {
+            val data = Math.random()
+            mLiveData.postValue(data)
+            delay(1000)
+            i++
+        }
+    }
+
+    fun executeRandomNumberCycleByRxJava(): Observable<Double> {
+        return Observable.create { subscriber ->
+                while (i < 10) {
+                    val data = Math.random()
+                    subscriber.onNext(data)
+                    Thread.sleep(1000)
+                    i++
+                }
+        }
     }
 
 }
+

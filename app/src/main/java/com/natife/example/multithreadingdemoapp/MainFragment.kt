@@ -1,13 +1,19 @@
 package com.natife.example.multithreadingdemoapp
 
 import android.os.Bundle
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.natife.example.multithreadingdemoapp.databinding.MainFragmentBinding
-
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
 
@@ -27,10 +33,29 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myViewModel.executeRandomNumberCycle()
-        myViewModel.liveData.observe(viewLifecycleOwner, {
+
+        //RxJava
+        myViewModel
+            .executeRandomNumberCycleByRxJava()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
             binding.textView.text = it.toString()
+        }, {
+            d("RxJavaError", "Something happen here", it)
         })
+
+        //Coroutines
+//        CoroutineScope(Dispatchers.Default).launch {
+//            myViewModel.executeRandomNumberCycleByCoroutines()
+//        }
+
+
+        //LiveData
+//        myViewModel.executeRandomNumberCycleByLiveData()
+//        myViewModel.liveData.observe(viewLifecycleOwner, {
+//            binding.textView.text = it.toString()
+//        })
     }
 
 }
