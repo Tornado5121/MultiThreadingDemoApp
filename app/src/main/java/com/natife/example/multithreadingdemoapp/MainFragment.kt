@@ -9,13 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.natife.example.multithreadingdemoapp.databinding.MainFragmentBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
 
+    lateinit var myDespose: Disposable
     private lateinit var binding: MainFragmentBinding
     private val myViewModel: MainViewModel by lazy {
         ViewModelProvider(requireActivity())[MainViewModel::class.java]
@@ -33,28 +32,32 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        RxJava
-        myViewModel
+        //RxJava
+        myDespose = myViewModel
             .executeRandomNumberCycleByRxJava()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe ({
-            binding.textView.text = it.toString()
-        }, {
-            d("RxJavaError", "Something happen here", it)
-        })
+            .subscribe({
+                binding.textView.text = it.toString()
+            }, {
+                d("RxJavaError", "Something happen here", it)
+            })
 
-//        Coroutines
-//        CoroutineScope(Dispatchers.Default).launch {
-//            myViewModel.executeRandomNumberCycleByCoroutines()
-//        }
+        //Coroutines
+//        myViewModel.executeRandomNumberCycleByCoroutines()
+//        myViewModel.liveData.observe(viewLifecycleOwner, {
+//            binding.textView.text = it.toString()
+//        })
 
-
-//        LiveData
+        //LiveData
 //        myViewModel.executeRandomNumberCycleByLiveData()
 //        myViewModel.liveData.observe(viewLifecycleOwner, {
 //            binding.textView.text = it.toString()
 //        })
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        myDespose.dispose()
+    }
 }
