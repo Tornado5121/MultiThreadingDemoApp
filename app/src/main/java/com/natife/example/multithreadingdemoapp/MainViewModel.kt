@@ -13,7 +13,7 @@ class MainViewModel : ViewModel() {
 
     private val mLiveData = MutableLiveData<Double>()
     val liveData: LiveData<Double> = mLiveData
-    private lateinit var myThread: Thread
+    private var myThread: Thread? = null
 
     fun executeRandomNumberCycleByLiveData() {
         var i = 0
@@ -25,7 +25,7 @@ class MainViewModel : ViewModel() {
                 i++
             }
         }
-        myThread.start()
+        myThread?.start()
     }
 
     fun executeRandomNumberCycleByCoroutines() {
@@ -49,7 +49,7 @@ class MainViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        myThread.interrupt()
+        myThread?.interrupt()
     }
 
 }

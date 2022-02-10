@@ -32,7 +32,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        //RxJava
+//        RxJava
 //        myDispose.add(
 //            myViewModel
 //                .executeRandomNumberCycleByRxJava()
@@ -45,7 +45,7 @@ class MainFragment : Fragment() {
 //                })
 //        )
 
-        //Coroutines
+//        Coroutines
 //        myViewModel.executeRandomNumberCycleByCoroutines()
 //        myViewModel.liveData.observe(viewLifecycleOwner, {
 //            binding.textView.text = it.toString()
@@ -62,4 +62,5 @@ class MainFragment : Fragment() {
         super.onDestroy()
         myDispose.dispose()
     }
+
 }
