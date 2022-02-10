@@ -46,16 +46,16 @@ class MainFragment : Fragment() {
 //        )
 
 //        Coroutines
-//        myViewModel.executeRandomNumberCycleByCoroutines()
-//        myViewModel.liveData.observe(viewLifecycleOwner, {
-//            binding.textView.text = it.toString()
-//        })
-
-        //LiveData
-        myViewModel.executeRandomNumberCycleByLiveData()
+        myViewModel.executeRandomNumberCycleByCoroutines()
         myViewModel.liveData.observe(viewLifecycleOwner, {
             binding.textView.text = it.toString()
         })
+
+        //LiveData
+//        myViewModel.executeRandomNumberCycleByLiveData()
+//        myViewModel.liveData.observe(viewLifecycleOwner, {
+//            binding.textView.text = it.toString()
+//        })
     }
 
     override fun onDestroy() {
